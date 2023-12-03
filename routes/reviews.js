@@ -1,7 +1,7 @@
 const { review } = require("../mocks/index");
 const _ = require("lodash");
 
-const reviews = _.times(8, function (n) {
+const reviews = _.times(50, function (n) {
   return { reviewId: n, ...review };
 });
 
