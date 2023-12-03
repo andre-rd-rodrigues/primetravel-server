@@ -3,7 +3,7 @@ const { faker } = require("@faker-js/faker");
 const _ = require("lodash");
 const { customer, package } = require("../mocks");
 
-const bookings = _.times(100, function (n) {
+const bookings = _.times(10, function (n) {
   return {
     id: faker.string.uuid(),
     bookingNumber: n,
