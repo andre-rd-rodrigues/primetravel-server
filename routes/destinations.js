@@ -1,8 +1,8 @@
 const _ = require("lodash");
-const { destination } = require("../mocks");
+const { createDestination } = require("../utils");
 
 const destinations = _.times(10, function (n) {
-  return { destinationNumber: n, ...destination };
+  return { destinationNumber: n, ...createDestination() };
 });
 
 module.exports = {

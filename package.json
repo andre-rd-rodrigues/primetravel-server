@@ -12,7 +12,7 @@
   "main": "data.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server-json": "nodemon -e js,json -w routes -w mocks -w data.js --exec \"json-server data.js --output db.json\""
+    "server-json": "nodemon -e js,json -w routes -w mocks -w utils -w data.js --exec \"json-server data.js --output db.json\""
   },
   "keywords": [
     "fake",

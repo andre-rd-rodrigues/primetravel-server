@@ -1,8 +1,8 @@
 const _ = require("lodash");
-const { travelAgent } = require("../mocks");
+const { createTravelAgent } = require("../utils");
 
 const travelAgents = _.times(10, function (n) {
-  return { agentNumber: n, ...travelAgent };
+  return { agentNumber: n, ...createTravelAgent() };
 });
 
 module.exports = {

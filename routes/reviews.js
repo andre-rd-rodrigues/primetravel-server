@@ -1,8 +1,8 @@
-const { review } = require("../mocks/index");
 const _ = require("lodash");
+const { createReview } = require("../utils");
 
 const reviews = _.times(50, function (n) {
-  return { reviewId: n, ...review };
+  return { reviewId: n, ...createReview() };
 });
 
 module.exports = {
