@@ -181,7 +181,7 @@ const createTravelAgent = () => {
       status: "done",
       type: "image/jpeg",
       uid: faker.string.uuid(),
-      url: faker.image.urlLoremFlickr({ category: "people" })()
+      url: faker.image.urlLoremFlickr({ category: "people" })
     },
     customers: _.times(_.random(1, 3), () => {
       return createCustomer();
@@ -222,7 +222,7 @@ const createBooking = () => {
         name: faker.person.fullName(),
         type: "image/jpeg",
         uid: faker.string.uuid(),
-        url: faker.image.urlLoremFlickr({ category: "people" })()
+        url: faker.image.urlLoremFlickr({ category: "people" })
       },
       address: {
         text: faker.location.streetAddress(),
@@ -268,7 +268,7 @@ const createBooking = () => {
       id: faker.string.uuid(),
       avatar: {
         type: "image/jpeg",
-        url: faker.image.urlLoremFlickr({ category: "people" })()
+        url: faker.image.urlLoremFlickr({ category: "people" })
       },
       name: faker.person.fullName(),
       email: faker.internet.email(),
