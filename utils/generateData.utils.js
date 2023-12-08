@@ -13,10 +13,10 @@ const createDestination = () => {
       contact: {
         name: faker.person.fullName(),
         email: faker.internet.email(),
-        phoneNumber: faker.phone.number()
+        phone_number: faker.helpers.fromRegExp("[1-9]{3}-[1-9]{3}-[1-9]{4}")
       },
       rating: faker.number.int({ min: 3, max: 5, precision: 0.1 }),
-      imageUrl: faker.image.urlLoremFlickr({ category: "business" })
+      imageUrl: faker.image.urlPicsumPhotos()
     },
     isActive: faker.datatype.boolean()
   };
@@ -25,35 +25,35 @@ const createDestination = () => {
 const createCustomer = () => {
   return {
     id: faker.string.uuid(),
-    firstName: faker.person.firstName(),
-    lastName: faker.person.lastName(),
-    fullName: faker.person.fullName(),
+    first_name: faker.person.firstName(),
+    last_name: faker.person.lastName(),
+    full_name: faker.person.fullName(),
+    created_at: faker.date.between({ min: 1577836800000, max: 1893456000000 }),
+    sex: faker.person.sex(),
     gender: faker.person.gender(),
     contacts: {
-      phoneNumber: faker.phone.number(),
+      phone_number: faker.helpers.fromRegExp("[1-9]{3}-[1-9]{3}-[1-9]{4}"),
       email: faker.internet.email()
     },
-    createdAt: faker.date.between({ min: 1577836800000, max: 1893456000000 }),
     isActive: true,
     avatar: {
       name: faker.person.fullName(),
-      percent: 100,
-      size: 40088,
-      status: "done",
       type: "image/jpeg",
       uid: faker.string.uuid(),
-      url: faker.image.avatar()
+      url: faker.image.urlLoremFlickr({ category: "people" })
+    },
+
+    payment_info: {
+      total_amount: faker.number.int({ min: 500, max: 5000 }),
+      transaction_type: faker.finance.transactionType(),
+      iban: faker.finance.iban(),
+      payment_status: generateRandomStatus()
     },
     bookings: _.times(_.random(1, 4), () => {
       return {
         id: faker.string.uuid(),
-        createdAt: faker.date.past(),
-        payment_info: {
-          total_amount: faker.number.int({ min: 500, max: 5000 }),
-          transaction_type: faker.finance.transactionType(),
-          iban: faker.finance.iban(),
-          payment_status: generateRandomStatus()
-        },
+        created_at: faker.date.past(),
+        destination: createDestination(),
         travel_info: {
           dates: {
             starting_date: faker.date.soon({
@@ -74,11 +74,11 @@ const createCustomer = () => {
           }
         },
         status: generateRandomStatus(),
-        travelAgent: {
+        travel_agent: {
           id: faker.string.uuid(),
           name: faker.person.fullName(),
           email: faker.internet.email(),
-          phoneNumber: faker.phone.number(),
+          phone_number: faker.helpers.fromRegExp("[1-9]{3}-[1-9]{3}-[1-9]{4}"),
           customers: [
             {
               id: faker.string.uuid(),
@@ -89,16 +89,18 @@ const createCustomer = () => {
         }
       };
     }),
-    addresses: [
-      {
-        text: faker.location.streetAddress(),
-        coordinate: [faker.location.latitude(), faker.location.longitude()]
-      }
-    ],
+    address: {
+      street: faker.location.streetAddress(),
+      city: faker.location.city(),
+      state: faker.location.state(),
+      country: faker.location.country(),
+      zipCode: faker.location.zipCode()
+    },
     reviews: _.times(_.random(1, 3), () => {
       return {
         id: faker.string.uuid(),
-        star: _.random(1, 5),
+        title: faker.lorem.words(3),
+        star: _.random(2, 5),
         comment: faker.lorem.paragraph()
       };
     })
@@ -112,7 +114,7 @@ const createLocation = () => {
     state: faker.location.state(),
     country: faker.location.country(),
     zipCode: faker.location.zipCode(),
-    imageURL: faker.image.url()
+    imageURL: faker.image.urlPicsumPhotos()
   };
 };
 
@@ -153,23 +155,24 @@ const createPackage = () => {
 const createTravelAgent = () => {
   return {
     id: faker.string.uuid(),
-    firstName: faker.person.firstName(),
-    lastName: faker.person.lastName(),
-    fullName: faker.person.fullName(),
+    first_name: faker.person.firstName(),
+    last_name: faker.person.lastName(),
+    full_name: faker.person.fullName(),
+    sex: faker.person.sex(),
     gender: faker.person.gender(),
     contacts: {
-      phoneNumber: faker.phone.number(),
+      phone_number: faker.helpers.fromRegExp("[1-9]{3}-[1-9]{3}-[1-9]{4}"),
       email: faker.internet.email()
     },
     agency: {
       name: faker.company.name(),
       location: createLocation(),
       contacts: {
-        phoneNumber: faker.phone.number(),
+        phone_number: faker.helpers.fromRegExp("[1-9]{3}-[1-9]{3}-[1-9]{4}"),
         email: faker.internet.email()
       }
     },
-    createdAt: faker.date.between({ min: 1577836800000, max: 1893456000000 }),
+    created_at: faker.date.between({ min: 1577836800000, max: 1893456000000 }),
     isActive: true,
     avatar: {
       name: faker.person.fullName(),
@@ -178,7 +181,7 @@ const createTravelAgent = () => {
       status: "done",
       type: "image/jpeg",
       uid: faker.string.uuid(),
-      url: faker.image.avatar()
+      url: faker.image.urlLoremFlickr({ category: "people" })()
     },
     customers: _.times(_.random(1, 3), () => {
       return createCustomer();
@@ -198,8 +201,43 @@ const createReview = () => {
 const createBooking = () => {
   return {
     id: faker.string.uuid(),
-    customer: createCustomer(),
-    createdAt: faker.date.past(),
+    created_at: faker.date.past(),
+    customer: {
+      id: faker.string.uuid(),
+      first_name: faker.person.firstName(),
+      last_name: faker.person.lastName(),
+      full_name: faker.person.fullName(),
+      sex: faker.person.sex(),
+      gender: faker.person.gender(),
+      contacts: {
+        phone_number: faker.helpers.fromRegExp("[1-9]{3}-[1-9]{3}-[1-9]{4}"),
+        email: faker.internet.email()
+      },
+      created_at: faker.date.between({
+        min: 1577836800000,
+        max: 1893456000000
+      }),
+      isActive: true,
+      avatar: {
+        name: faker.person.fullName(),
+        type: "image/jpeg",
+        uid: faker.string.uuid(),
+        url: faker.image.urlLoremFlickr({ category: "people" })()
+      },
+      address: {
+        text: faker.location.streetAddress(),
+        coordinate: [faker.location.latitude(), faker.location.longitude()]
+      },
+
+      reviews: _.times(_.random(1, 3), () => {
+        return {
+          id: faker.string.uuid(),
+          star: _.random(1, 5),
+          comment: faker.lorem.paragraph()
+        };
+      })
+    },
+    destination: createDestination(),
     payment_info: {
       total_amount: faker.number.int({ min: 500, max: 5000 }),
       transaction_type: faker.finance.transactionType(),
@@ -214,21 +252,27 @@ const createBooking = () => {
           refDate: new Date().toISOString()
         })
       },
-      packages: _.times(2, createPackage()),
+      packages: _.times(2, () => {
+        return { ...createPackage() };
+      }),
       events: _.times(1, generateRandomEvent()),
       airline: {
-        flight_number: faker.airline.flightNumber,
-        aircraft_type: faker.airline.aircraftType,
-        airline: faker.airline.airline,
-        flight_seat: faker.airline.seat
+        flight_number: faker.airline.flightNumber(),
+        aircraft_type: faker.airline.aircraftType(),
+        flight_company: faker.airline.airline(),
+        flight_seat: faker.airline.seat()
       }
     },
     status: generateRandomStatus(),
-    travelAgent: {
+    travel_agent: {
       id: faker.string.uuid(),
+      avatar: {
+        type: "image/jpeg",
+        url: faker.image.urlLoremFlickr({ category: "people" })()
+      },
       name: faker.person.fullName(),
       email: faker.internet.email(),
-      phoneNumber: faker.phone.number(),
+      phone_number: faker.helpers.fromRegExp("[1-9]{3}-[1-9]{3}-[1-9]{4}"),
       customers: [
         {
           id: faker.string.uuid(),
